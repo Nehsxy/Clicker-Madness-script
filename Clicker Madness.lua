@@ -134,7 +134,7 @@ end
 
 function doTap()
     spawn(function()
-        while autotap == true do
+        while getgenv().autotap == true do
             local args = {[1] = 1}
             remotePath.ClickService.Click:FireServer(unpack(args))
             wait()
@@ -144,7 +144,7 @@ end
 
 function doBeast()
     spawn(function()
-        while autotap == true do
+        while getgenv().autotap == true do
             local args = {[1] = 1}
             ClickMod:Click()
             wait()
