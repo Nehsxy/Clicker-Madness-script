@@ -1,4 +1,5 @@
 getgenv().autofarm = false
+getgenv().Autoreset = false
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("Victory Race autofarm", "Ocean")
@@ -28,10 +29,22 @@ Section:NewToggle("Autofarm (3 Sec Reset)", "Teleports to the end", function(boo
     end
 end)
 
+Section:NewToggle("Fast Autofarm (Buggy) ", "FASTEST AUTOFARM", function(bool)
+    getgenv().autofarm = bool
+    if bool then
+        autofarmwins()
+    end
+end)
+
+Section:NewButton("Reset", "Resets your character", function()
+    game.Players.LocalPlayer.Character.Humanoid.Health = 0
+end)
+
 
 Miscel:NewSlider("Walkspeed", "Changes your Walkspeed", 500000000, 16, function(s) 
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = s
 end)
+
 
 
 function autofarmEnd3()
@@ -81,3 +94,19 @@ function autofarmEnd15()
         end
     end)
 end
+
+function autofarmwins()
+    spawn(function()
+        while getgenv().autofarm == true do
+            for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
+                if tostring(v) == "Win" and v:IsA("Part") then 
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                    wait(0.1)
+                    break
+                end
+            end
+        end
+    end)
+end
+
+
