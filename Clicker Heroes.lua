@@ -20,36 +20,43 @@ local Misc = Window:NewTab("Misc")
 local Miscel = Misc:NewSection("Misc")
 local Credit = Window:NewTab("Credits")
 local Credits = Credit:NewSection("This Script was made by Akame#1531")
+local Crystals = Autofarm:NewSection("Crystal Autofarm")
 
 
 Credits:NewButton("Click To copy discord link", "Copys Discord link", function()
     setclipboard(text)
 end)
 
+local AcWorld
+Section:NewDropdown("Select where to Autoclick (Need to unlock first)", "DropdownInf", {"Home", "Winter", "Toy", "Atlantis", "Magma", "Space", "Tech", "Ninja", "Desert"}, function(value)
+    AcWorld = value
+end)
+
+
 Section:NewToggle("Fast Autoclicker", "Automaticly clicks for you (Trash ngl)", function(bool)
     getgenv().autotap = bool
     if bool then
-        FastAutoclick()
+        FastAutoclick(AcWorld)
     end
 end)
 
 Section:NewToggle("Slow Autoclicker", "Automaticly clicks for you (Trash ngl)", function(bool)
     getgenv().autotap = bool
     if bool then
-        Autoclick()
+        Autoclick(AcWorld)
     end
 end)
 
 local selectedWorld
-Section:NewDropdown("Select World for Auto damage Crystals", "DropdownInf", {"Home", "Winter", "Toy", "Atlantis", "Magma", "Space", "Tech", "Ninja", "Desert"}, function(value)
+Crystals:NewDropdown("Select World for Auto damage Crystals", "DropdownInf", {"Home", "Winter", "Toy", "Atlantis", "Magma", "Space", "Tech", "Ninja", "Desert"}, function(value)
     selectedWorld = value
 end)
 local selectedCrystal
-Section:NewDropdown("Select which Crystal to Damage (Needed)", "DropdownInf", {"1", "2", "3", "4"}, function(value)
+Crystals:NewDropdown("Select which Crystal to Damage (Needed)", "DropdownInf", {"1", "2", "3", "4"}, function(value)
     selectedCrystal = value
 end)
 
-Section:NewToggle("Auto damage Crystals", "Gives you Gems automaticly", function(bool)
+Crystals:NewToggle("Auto damage Crystals", "Gives you Gems automaticly", function(bool)
     getgenv().DamageCrystal = bool
     if bool then
         DamageCrystals(selectedWorld, selectedCrystal)
@@ -123,18 +130,19 @@ function StarterEgg(EggType)
                 [2] = EggType
             }
             game:GetService("ReplicatedStorage").Shared.Modules.Utilities.NetworkUtility.Events.UpdatePets:FireServer(unpack(args))
+            wait(3)
         end
     end)
 end
 
 
-function Autoclick()
+function Autoclick(AtWorld)
     spawn(function()
         while getgenv().autotap == true do
             local args = {
                 [1] = "Tap Capacity",
                 [2] = "HandleTapActivation",
-                [3] = "Home"
+                [3] = AtWorld
             }
             game:GetService("ReplicatedStorage").Shared.Modules.Utilities.NetworkUtility.Events.UpdateGemUpgrades:FireServer(unpack(args))
             wait(0.5)
@@ -142,13 +150,13 @@ function Autoclick()
     end)
 end
 
-function FastAutoclick()
+function FastAutoclick(AtWorld)
     spawn(function()
         while getgenv().autotap == true do
             local args = {
             [1] = "Tap Capacity",
             [2] = "HandleTapActivation",
-            [3] = "Home"
+            [3] = AtWorld
             }
             game:GetService("ReplicatedStorage").Shared.Modules.Utilities.NetworkUtility.Events.UpdateGemUpgrades:FireServer(unpack(args))
             wait()
